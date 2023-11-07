@@ -1,0 +1,35 @@
+{
+  "name": "grunt-ps-unzip",
+  "version": "0.0.1",
+  "description": "Grunt plugin to unzip archives in zip format",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PeterSelvaraj/grunt-ps-unzip.git"
+  },
+  "keywords": [
+    "GruntJS",
+    "plugin",
+    "grunt",
+    "unzip"
+  ],
+  "author": "Peter Selvaraj",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/PeterSelvaraj/grunt-ps-unzip/issues"
+  },
+  "homepage": "https://github.com/PeterSelvaraj/grunt-ps-unzip#readme",
+  "devDependencies": {
+    "fast-glob": "~3.3.2",
+    "grunt": "~1.6.1",
+    "grunt-contrib-clean": "~2.0.1",
+    "grunt-contrib-jshint": "~3.2.0",
+    "grunt-ps-file": "^1.1.0"
+  },
+  "dependencies": {
+    "unzipper": "~0.10.14"
+  }
+}
