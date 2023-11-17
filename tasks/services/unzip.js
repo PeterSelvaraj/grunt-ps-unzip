@@ -8,28 +8,44 @@
 'use strict';
 
 const fs = require('fs');
-const { log } = require('console');
-const unzipper = require('unzipper');
+const path = require('path');
+const JSZip = require('jszip');
 
 class UnzipSvc {
   #fileIndex = 0;
 
-  #createDest(dest) {
-    if (!fs.existsSync(dest)) {
-      fs.mkdirSync(dest, { recursive: true });
+  #createFilePath(filePath) {
+    const dir = path.dirname(filePath);
+
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
     }
   }
 
-  #unzipFile(opts, done) {
-    if (fs.existsSync(opts.file)) {
-      this.#createDest(opts.dest);
-      const stream = fs.createReadStream(opts.file);
-      const pipe = unzipper.Extract({ path: opts.dest });
-      stream.pipe(pipe).on('close', done);
-    } else {
-      log(`File ${opts.file} does not exist!`);
-      done();
-    }
+  async #unzipFile(opts, done) {
+    const jsZip = new JSZip();
+    const zipData = fs.readFileSync(opts.file);
+
+    await jsZip.loadAsync(zipData);
+
+    let fileCount = 0;
+    let writeCount = 0;
+
+    jsZip.forEach(async (fileName, data) => {
+      if (data.dir) { return }
+
+      const filePath = path.join(opts.dest, fileName);
+
+      this.#createFilePath(filePath);
+
+      fileCount++;
+
+      data.async('nodebuffer').then(fileContent => {
+        writeCount++;
+        fs.writeFileSync(filePath, fileContent, { encoding: 'utf8' });
+        if (fileCount === writeCount) { done(); }
+      });
+    });
   }
 
   unzipFiles(files, done) {

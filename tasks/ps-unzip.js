@@ -7,16 +7,15 @@
 
 'use strict';
 
-const grunt = require('grunt');
-const { log } = require('console');
+const log = require('grunt-ps-log');
 const unzipSvc = require('./services/unzip');
 
-module.exports = function () {
+module.exports = function (grunt) {
   grunt.registerMultiTask('psUnzip', 'Unzips archives in zip format', function () {
     const files = [];
     const done = this.async();
 
-    log(`Starting ${this.target} task...`);
+    log.log(`Starting ${this.target} task...`);
 
     this.files.forEach(item => {
       item.src.forEach(src => {
@@ -28,7 +27,7 @@ module.exports = function () {
     });
 
     unzipSvc.unzipFiles(files, () => {
-      log(`Task ${this.target} is complete!`);
+      log.ok(`Task ${this.target} is complete!`);
       done();
     });
   });
